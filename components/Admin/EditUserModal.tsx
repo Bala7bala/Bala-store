@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 
 interface User {
   id: string;
+  name: string;
   email: string;
   mobile?: string;
   role: 'admin' | 'user';
@@ -12,11 +13,12 @@ interface User {
 interface EditUserModalProps {
     user: User;
     onClose: () => void;
-    onSave: (userId: string, updates: { email?: string; mobile?: string; pass?: string }) => Promise<void>;
+    onSave: (userId: string, updates: { name?: string; email?: string; mobile?: string; pass?: string }) => Promise<void>;
 }
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onSave }) => {
     const { translateUI } = useLanguage();
+    const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [mobile, setMobile] = useState(user.mobile || '');
     const [password, setPassword] = useState('');
@@ -25,8 +27,9 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onSave }) 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
-        const updates: { email?: string; mobile?: string; pass?: string } = {};
+        const updates: { name?: string; email?: string; mobile?: string; pass?: string } = {};
 
+        if (name !== user.name) updates.name = name;
         if (email !== user.email) updates.email = email;
         if (mobile !== (user.mobile || '')) updates.mobile = mobile;
         if (password) updates.pass = password;
@@ -47,6 +50,10 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onSave }) 
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="p-6 space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" value={name} onChange={e => setName(e.target.value)} required className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-orange-500" />
+                        </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">{translateUI('email')}</label>
                             <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-orange-500" />

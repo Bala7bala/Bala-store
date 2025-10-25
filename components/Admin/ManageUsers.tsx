@@ -7,6 +7,7 @@ import EditUserModal from './EditUserModal';
 
 interface User {
   id: string;
+  name: string;
   email: string;
   mobile?: string;
   role: 'admin' | 'user';
@@ -19,7 +20,7 @@ const ManageUsers: React.FC = () => {
 
     const allUsers = getUsers();
 
-    const handleSaveUser = async (userId: string, updates: { email?: string; mobile?: string; pass?: string; }) => {
+    const handleSaveUser = async (userId: string, updates: { name?:string; email?: string; mobile?: string; pass?: string; }) => {
         await updateUserCredentials(userId, updates);
         setEditingUser(null);
     };
@@ -42,7 +43,8 @@ const ManageUsers: React.FC = () => {
                         <div key={user.id} className="bg-white p-4 rounded-lg shadow border border-gray-200">
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <p className="font-bold text-gray-800">{user.email}</p>
+                                    <p className="font-bold text-gray-800">{user.name}</p>
+                                    <p className="text-sm text-gray-500">{user.email}</p>
                                     <p className="text-sm text-gray-500">{user.mobile || 'No mobile'}</p>
                                 </div>
                                 <button onClick={() => setEditingUser(user)} className="text-blue-600 hover:text-blue-900 p-1" title={translateUI('edit')}>
@@ -64,6 +66,7 @@ const ManageUsers: React.FC = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{translateUI('email')}</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{translateUI('mobile')}</th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{translateUI('role')}</th>
@@ -73,7 +76,8 @@ const ManageUsers: React.FC = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {allUsers.map(user => (
                                 <tr key={user.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.email}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.name}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.mobile || 'N/A'}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className="capitalize px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">

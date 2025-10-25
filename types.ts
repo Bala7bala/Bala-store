@@ -38,3 +38,13 @@ export interface Order {
   paymentMethod: 'COD' | 'UPI';
   paymentStatus: 'Pending' | 'Paid';
 }
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  mobile?: string;
+  role: 'admin' | 'user';
+}
+
+export type UserRecord = User & { pass?: string };

@@ -1,46 +1,28 @@
-
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-
-interface User {
-  id: string;
-  email: string;
-  mobile?: string;
-  role: 'admin' | 'user';
-}
+import { User, UserRecord } from '../types';
 
 interface AuthContextType {
   user: User | null;
   login: (identifier: string, pass: string) => Promise<void>;
+  signup: (name: string, email: string, mobile: string, pass: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   getUsers: () => User[];
-  updateUserCredentials: (userId: string, updates: { email?: string; mobile?: string; pass?: string }) => Promise<void>;
+  updateUserCredentials: (userId: string, updates: { name?: string; email?: string; mobile?: string; pass?: string }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-// FIX: Create an internal `UserRecord` type that includes the `pass` property.
-// This resolves type errors when accessing `pass` for authentication,
-// while keeping the public `User` type clean of sensitive data.
-type UserRecord = User & { pass?: string };
-
-// Dummy user data
-const DUMMY_USERS: UserRecord[] = [
-  { id: 'admin1', email: 'admin@store.com', mobile: '1234567890', pass: 'admin123', role: 'admin' },
-  { id: 'user1', email: 'user@store.com', mobile: '9876543210', pass: 'user123', role: 'user' },
-  { id: 'google_user', email: 'google.user@gmail.com', mobile: '1112223334', role: 'user' },
-];
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [users, setUsers] = useState<UserRecord[]>(() => {
     try {
       const storedUsers = localStorage.getItem('app_users');
-      return storedUsers ? JSON.parse(storedUsers) : DUMMY_USERS;
+      return storedUsers ? JSON.parse(storedUsers) : [];
     } catch (error) {
       console.error("Failed to parse users from local storage", error);
-      return DUMMY_USERS;
+      return [];
     }
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -90,6 +72,32 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
+  const signup = async (name: string, email: string, mobile: string, pass: string) => {
+      return new Promise<void>((resolve, reject) => {
+          setTimeout(() => {
+              const emailLower = email.toLowerCase();
+              const existingUser = users.find(u => u.email.toLowerCase() === emailLower || u.mobile === mobile);
+              if (existingUser) {
+                  reject(new Error('User with this email or mobile already exists.'));
+                  return;
+              }
+
+              const newUser: UserRecord = {
+                  id: `user${Date.now()}`,
+                  name,
+                  email,
+                  mobile,
+                  pass,
+                  role: 'user'
+              };
+
+              setUsers(prev => [...prev, newUser]);
+              resolve();
+          }, 500);
+      });
+  };
+
+
   const loginWithGoogle = async () => {
     return new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -106,14 +114,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return users.map(({ pass, ...user }) => user);
   };
 
-  const updateUserCredentials = async (userId: string, updates: { email?: string, mobile?: string, pass?: string }) => {
+  const updateUserCredentials = async (userId: string, updates: { name?: string, email?: string, mobile?: string, pass?: string }) => {
       return new Promise<void>((resolve) => {
           setTimeout(() => {
               setUsers(currentUsers => 
                   currentUsers.map(u => {
                       if (u.id === userId) {
-                          const finalUpdates = { ...updates };
-                          if (finalUpdates.pass === '') {
+                          const finalUpdates: Partial<UserRecord> = { ...updates };
+                           if ('pass' in finalUpdates && finalUpdates.pass === '') {
                               delete finalUpdates.pass;
                           }
                           return { ...u, ...finalUpdates };
@@ -146,7 +154,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading, loginWithGoogle, getUsers, updateUserCredentials }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, isLoading, loginWithGoogle, getUsers, updateUserCredentials }}>
       {!isLoading && children}
     </AuthContext.Provider>
   );

@@ -1,13 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SettingsProvider } from './context/SettingsContext';
 import { Product, Order, Category } from './types';
-import { PRODUCTS as INITIAL_PRODUCTS, INITIAL_CATEGORIES } from './constants';
 import Login from './components/Login';
 import UserDashboard from './components/UserDashboard';
 import AdminDashboard from './components/Admin/AdminDashboard';
+import { PRODUCTS, INITIAL_CATEGORIES, DUMMY_USERS } from './constants';
 
 const AppContent: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -24,18 +23,18 @@ const AppContent: React.FC = () => {
           stockStatus: p.stockStatus || 'In Stock',
         }))
       }
-      return INITIAL_PRODUCTS;
+      return [];
     } catch (e) {
-      return INITIAL_PRODUCTS;
+      return [];
     }
   });
 
   const [categories, setCategories] = useState<Category[]>(() => {
     try {
       const savedCategories = localStorage.getItem('categories');
-      return savedCategories ? JSON.parse(savedCategories) : INITIAL_CATEGORIES;
+      return savedCategories ? JSON.parse(savedCategories) : [];
     } catch (e) {
-      return INITIAL_CATEGORIES;
+      return [];
     }
   });
 
@@ -139,6 +138,42 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const [isInitialized, setIsInitialized] = useState(() => {
+    try {
+        return localStorage.getItem('is_initialized') === 'true';
+    } catch {
+        return false;
+    }
+  });
+
+  useEffect(() => {
+    if (!isInitialized) {
+        try {
+            console.log("Application not initialized. Setting up with default data...");
+            localStorage.setItem('products', JSON.stringify(PRODUCTS));
+            localStorage.setItem('categories', JSON.stringify(INITIAL_CATEGORIES));
+            localStorage.setItem('orders', JSON.stringify([]));
+            localStorage.setItem('app_users', JSON.stringify(DUMMY_USERS));
+            localStorage.setItem('storeSettings', JSON.stringify({ upiId: '', qrCode: '' }));
+            localStorage.setItem('cart', JSON.stringify([]));
+            localStorage.setItem('is_initialized', 'true');
+            
+            window.location.reload();
+        } catch (error) {
+            console.error("Failed to auto-initialize with sample data:", error);
+            alert("An error occurred during initial application setup.");
+        }
+    }
+  }, [isInitialized]);
+
+  if (!isInitialized) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <p className="text-gray-500">Setting up application for first use...</p>
+        </div>
+    );
+  }
+
   return (
     <LanguageProvider>
       <AuthProvider>

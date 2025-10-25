@@ -1,5 +1,4 @@
-
-import { Category, Product, LocalizedString } from './types';
+import { Category, Product, LocalizedString, UserRecord } from './types';
 
 export const UI_STRINGS: { [key: string]: LocalizedString } = {
   storeName: { en: 'BALA STORE', te: 'బాల స్టోర్' },
@@ -81,6 +80,12 @@ export const UI_STRINGS: { [key: string]: LocalizedString } = {
   manageCategories: { en: 'Manage Categories', te: 'వర్గాలను నిర్వహించండి' },
   editCategory: { en: 'Edit Category', te: 'వర్గాన్ని సవరించండి' },
 };
+
+export const DUMMY_USERS: UserRecord[] = [
+  { id: 'admin1', name: 'Admin Bala', email: 'admin@store.com', mobile: '1234567890', pass: 'admin123', role: 'admin' },
+  { id: 'user1', name: 'Test User', email: 'user@store.com', mobile: '9876543210', pass: 'user123', role: 'user' },
+  { id: 'google_user', name: 'Google User', email: 'google.user@gmail.com', mobile: '1112223334', role: 'user' },
+];
 
 export const INITIAL_CATEGORIES: Category[] = [
   { id: 'groceries', name: { en: 'Groceries', te: 'కిరాణా' }, image: 'https://picsum.photos/seed/groceries/400/300' },
