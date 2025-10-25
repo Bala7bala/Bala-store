@@ -85,6 +85,14 @@ const AppContent: React.FC = () => {
     setCategories(prev => [...prev, { ...category, id: `cat${Date.now()}` }]);
   };
 
+  const updateCategory = (updatedCategory: Category) => {
+    setCategories(prev => prev.map(c => c.id === updatedCategory.id ? updatedCategory : c));
+  };
+
+  const deleteCategory = (categoryId: string) => {
+    setCategories(prev => prev.filter(c => c.id !== categoryId));
+  };
+
   const addOrder = (order: Omit<Order, 'id'>) => {
     setOrders(prev => [{ ...order, id: `ORDER-${Date.now()}` }, ...prev]);
   };
@@ -117,6 +125,8 @@ const AppContent: React.FC = () => {
               onDeleteProduct={deleteProduct}
               onUpdateProductStockStatus={updateProductStockStatus}
               onUpdateProduct={updateProduct}
+              onUpdateCategory={updateCategory}
+              onDeleteCategory={deleteCategory}
             />;
   }
 

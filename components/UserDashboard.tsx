@@ -8,6 +8,7 @@ import ProductList from './ProductList';
 import CartView from './CartView';
 import OrderHistory from './OrderHistory';
 import { Category, Order, Product } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 type View = 'home' | 'products' | 'cart' | 'orders';
 
@@ -23,6 +24,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ products, categories, use
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const { cart, addToCart, updateQuantity, removeFromCart, clearCart, getCartTotal, getCartCount } = useCart();
   const { user } = useAuth();
+  const { translateUI } = useLanguage();
   
   const handleSelectCategory = useCallback((category: Category) => {
     setSelectedCategory(category);
@@ -69,7 +71,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ products, categories, use
         {renderContent()}
       </main>
       <footer className="text-center p-4 text-gray-500 text-sm mt-8">
-        <p>&copy; {new Date().getFullYear()} BALA GENERAL AND FANCY STORE – DOKIPARRU</p>
+        <p>&copy; {new Date().getFullYear()} {translateUI('storeName')} – DOKIPARRU</p>
       </footer>
     </div>
   );

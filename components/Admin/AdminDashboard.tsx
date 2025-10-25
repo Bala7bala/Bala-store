@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Product, Order, Category } from '../../types';
-import { LogOutIcon, PlusSquareIcon, ArchiveIcon, CreditCardIcon, ClipboardListIcon, UsersIcon, SettingsIcon } from '../icons';
+import { LogOutIcon, PlusSquareIcon, ArchiveIcon, CreditCardIcon, ClipboardListIcon, UsersIcon, SettingsIcon, GridIcon } from '../icons';
 import AddProduct from './AddProduct';
 import AddCategory from './AddCategory';
 import ManageOrders from './ManageOrders';
@@ -11,8 +11,9 @@ import TransactionHistory from './TransactionHistory';
 import ManageUsers from './ManageUsers';
 import StoreSettings from './StoreSettings';
 import { useLanguage } from '../../context/LanguageContext';
+import ManageCategories from './ManageCategories';
 
-type AdminView = 'orders' | 'add-product' | 'add-category' | 'manage-products' | 'transactions' | 'manage-users' | 'settings';
+type AdminView = 'orders' | 'add-product' | 'add-category' | 'manage-categories' | 'manage-products' | 'transactions' | 'manage-users' | 'settings';
 
 interface AdminDashboardProps {
     products: Product[];
@@ -25,6 +26,8 @@ interface AdminDashboardProps {
     onUpdateOrderPaymentStatus: (orderId: string, paymentStatus: Order['paymentStatus']) => void;
     onDeleteProduct: (productId: string) => void;
     onUpdateProductStockStatus: (productId: string, stockStatus: Product['stockStatus']) => void;
+    onUpdateCategory: (category: Category) => void;
+    onDeleteCategory: (categoryId: string) => void;
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
@@ -37,7 +40,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     onUpdateOrderStatus, 
     onUpdateOrderPaymentStatus,
     onDeleteProduct, 
-    onUpdateProductStockStatus 
+    onUpdateProductStockStatus,
+    onUpdateCategory,
+    onDeleteCategory
 }) => {
     const [view, setView] = useState<AdminView>('orders');
     const { logout, user } = useAuth();
@@ -51,6 +56,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 return <AddProduct onAddProduct={onAddProduct} categories={categories} />;
             case 'add-category':
                 return <AddCategory onAddCategory={onAddCategory} />;
+            case 'manage-categories':
+                return <ManageCategories categories={categories} onUpdateCategory={onUpdateCategory} onDeleteCategory={onDeleteCategory} />;
             case 'manage-products':
                 return <ManageProducts products={products} categories={categories} onDeleteProduct={onDeleteProduct} onUpdateStockStatus={onUpdateProductStockStatus} onUpdateProduct={onUpdateProduct} />;
             case 'transactions':
@@ -103,6 +110,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                        <NavButton targetView="orders" icon={<ClipboardListIcon className="w-5 h-5"/>} label={translateUI('manageOrders')} />
                        <NavButton targetView="add-product" icon={<PlusSquareIcon className="w-5 h-5" />} label={translateUI('addProduct')} />
                        <NavButton targetView="add-category" icon={<PlusSquareIcon className="w-5 h-5" />} label={translateUI('addCategory')} />
+                       <NavButton targetView="manage-categories" icon={<GridIcon className="w-5 h-5" />} label={translateUI('manageCategories')} />
                        <NavButton targetView="manage-products" icon={<ArchiveIcon className="w-5 h-5" />} label={translateUI('manageProducts')} />
                        <NavButton targetView="transactions" icon={<CreditCardIcon className="w-5 h-5" />} label={translateUI('transactionHistory')} />
                        <NavButton targetView="manage-users" icon={<UsersIcon className="w-5 h-5" />} label={translateUI('manageUsers')} />

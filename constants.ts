@@ -2,7 +2,7 @@
 import { Category, Product, LocalizedString } from './types';
 
 export const UI_STRINGS: { [key: string]: LocalizedString } = {
-  storeName: { en: 'Bala General & Fancy Store', te: 'బాల జనరల్ & ఫ్యాన్సీ స్టోర్' },
+  storeName: { en: 'BALA STORE', te: 'బాల స్టోర్' },
   home: { en: 'Home', te: 'హోమ్' },
   orders: { en: 'My Orders', te: 'నా ఆర్డర్లు' },
   categories: { en: 'Product Categories', te: 'ఉత్పత్తి వర్గాలు' },
@@ -78,6 +78,8 @@ export const UI_STRINGS: { [key: string]: LocalizedString } = {
   importData: { en: 'Import Data', te: 'డేటాను దిగుమతి చేయండి' },
   importDescription: { en: 'Restore data from a backup file. This will overwrite all current data.', te: 'బ్యాకప్ ఫైల్ నుండి డేటాను పునరుద్ధరించండి. ఇది ప్రస్తుత డేటా మొత్తాన్ని ఓవర్రైట్ చేస్తుంది.' },
   importConfirm: { en: 'Are you sure you want to import data? This will overwrite all existing products, categories, orders, users, and settings. This action cannot be undone.', te: 'మీరు డేటాను దిగుమతి చేయాలనుకుంటున్నారని ఖచ్చితంగా అనుకుంటున్నారా? ఇది ఇప్పటికే ఉన్న అన్ని ఉత్పత్తులు, వర్గాలు, ఆర్డర్లు, వినియోగదారులు మరియు సెట్టింగ్‌లను ఓవర్రైట్ చేస్తుంది. ఈ చర్యను రద్దు చేయడం సాధ్యం కాదు.' },
+  manageCategories: { en: 'Manage Categories', te: 'వర్గాలను నిర్వహించండి' },
+  editCategory: { en: 'Edit Category', te: 'వర్గాన్ని సవరించండి' },
 };
 
 export const INITIAL_CATEGORIES: Category[] = [
