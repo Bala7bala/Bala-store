@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import { GoogleIcon } from './icons';
 
 const Signup: React.FC<{ setView: (view: 'login' | 'signup') => void }> = ({ setView }) => {
     const [name, setName] = useState('');
@@ -122,7 +121,7 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
-    const { login, loginWithGoogle } = useAuth();
+    const { login } = useAuth();
     const { translateUI } = useLanguage();
     const [view, setView] = useState<'login' | 'signup'>('login');
 
@@ -132,18 +131,6 @@ const Login: React.FC = () => {
         setIsLoggingIn(true);
         try {
             await login(identifier, password);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'An unknown error occurred');
-        } finally {
-            setIsLoggingIn(false);
-        }
-    };
-
-    const handleGoogleLogin = async () => {
-        setError('');
-        setIsLoggingIn(true);
-        try {
-            await loginWithGoogle();
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
         } finally {
@@ -197,25 +184,11 @@ const Login: React.FC = () => {
                             disabled={isLoggingIn}
                             className="w-full bg-orange-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:bg-orange-300"
                         >
-                            {isLoggingIn ? 'Signing In...' : 'Sign In with Password'}
+                            {isLoggingIn ? 'Signing In...' : 'Sign In'}
                         </button>
                     </div>
                 </form>
-                <div className="my-6 flex items-center">
-                    <div className="flex-grow border-t border-gray-300"></div>
-                    <span className="flex-shrink mx-4 text-gray-500">OR</span>
-                    <div className="flex-grow border-t border-gray-300"></div>
-                </div>
-                <div className="space-y-4">
-                    <button
-                        onClick={handleGoogleLogin}
-                        disabled={isLoggingIn}
-                        className="w-full flex justify-center items-center space-x-2 bg-white border border-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-300 disabled:opacity-50"
-                    >
-                        <GoogleIcon className="w-5 h-5" />
-                        <span>{translateUI('signInWithGoogle')}</span>
-                    </button>
-                </div>
+
                 <div className="text-center mt-6">
                     <p className="text-sm text-gray-600">
                         Don't have an account?{' '}

@@ -5,7 +5,6 @@ interface AuthContextType {
   user: User | null;
   login: (identifier: string, pass: string) => Promise<void>;
   signup: (name: string, email: string, mobile: string, pass: string) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   getUsers: () => User[];
@@ -97,18 +96,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
   };
 
-
-  const loginWithGoogle = async () => {
-    return new Promise<void>((resolve) => {
-        setTimeout(() => {
-            const googleUser = users.find(u => u.id === 'google_user');
-            if (googleUser) {
-                performLogin(googleUser);
-            }
-            resolve();
-        }, 500);
-    });
-  }
   
   const getUsers = () => {
     return users.map(({ pass, ...user }) => user);
@@ -154,7 +141,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, isLoading, loginWithGoogle, getUsers, updateUserCredentials }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, isLoading, getUsers, updateUserCredentials }}>
       {!isLoading && children}
     </AuthContext.Provider>
   );

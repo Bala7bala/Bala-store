@@ -51,7 +51,6 @@ export const UI_STRINGS: { [key: string]: LocalizedString } = {
   edit: { en: 'Edit', te: 'సవరించు' },
   editProduct: { en: 'Edit Product', te: 'ఉత్పత్తిని సవరించండి' },
   saveChanges: { en: 'Save Changes', te: 'మార్పులను భద్రపరచు' },
-  signInWithGoogle: { en: 'Sign in with Google', te: 'Googleతో సైన్ ఇన్ చేయండి' },
   customerDetails: { en: 'Delivery Details', te: 'డెలివరీ వివరాలు' },
   customerName: { en: 'Full Name', te: 'పూర్తి పేరు' },
   customerMobile: { en: 'Mobile Number', te: 'మొబైల్ నంబర్' },
@@ -84,7 +83,6 @@ export const UI_STRINGS: { [key: string]: LocalizedString } = {
 export const DUMMY_USERS: UserRecord[] = [
   { id: 'admin1', name: 'Admin Bala', email: 'admin@store.com', mobile: '1234567890', pass: 'admin123', role: 'admin' },
   { id: 'user1', name: 'Test User', email: 'user@store.com', mobile: '9876543210', pass: 'user123', role: 'user' },
-  { id: 'google_user', name: 'Google User', email: 'google.user@gmail.com', mobile: '1112223334', role: 'user' },
 ];
 
 export const INITIAL_CATEGORIES: Category[] = [
